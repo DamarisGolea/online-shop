@@ -46,6 +46,19 @@ public class ProductServiceIntegrationTests {
     public void testGetProduct_whenNonExistingEntity_thenThrowNotFoundException(){
         productService.getProduct(999999);
     }
+    @Test
+    public void testUpdateProduct_whenValidRequest_thenReturnUpdatedProduct(){
+        Product createdProduct = createProduct();
+        SaveProductRequest request= new SaveProductRequest();
+        request.setName(createdProduct.getName()+ " Updated");
+        request.setPrice(createProduct().getPrice()+ 10);
+        request.setQuantity(createProduct().getQuantity()+ 10);
+        Product updatedProduct = productService.updateProduct(createdProduct.getId(), request);
+
+        assertThat(updatedProduct, notNullValue());
+        assertThat(updatedProduct.getId(), is(createdProduct.getId()));
+        assertThat(updatedProduct.getName(), is(request.getName()));
+    }
 
     private Product createProduct() {
         SaveProductRequest request = new SaveProductRequest();
